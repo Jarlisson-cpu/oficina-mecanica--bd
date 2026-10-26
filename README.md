@@ -4,6 +4,12 @@
 
 Banco de dados em **PostgreSQL 16** para controlar **ordens de serviço (OS)** de uma oficina mecânica: clientes, veículos, mecânicos responsáveis, peças aplicadas e baixa de estoque. Cada regra afirmada no artigo tem um **teste executado** e uma **evidência** (captura de tela ou CSV) neste repositório.
 
+## Equipe
+
+- Jarlisson Brito Santos
+- Brunno Passos
+- Caio Vinicius
+
 ## O problema
 
 Na oficina, o controle em papel e planilha gera falhas recorrentes:
