@@ -1,0 +1,18 @@
+-- B9 Somar mão de obra das OS ABERTAS (0,2% da tabela) (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT sum(valor_mao_obra) FROM ordem_servico WHERE status = 'ABERTA';
+
+SET
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Aggregate (actual time=1.608..1.609 rows=1 loops=1)
+   Buffers: shared hit=532
+   ->  Index Scan using ix_os_status on ordem_servico (actual time=0.021..1.496 rows=574 loops=1)
+         Index Cond: (status = 'ABERTA'::status_os)
+         Buffers: shared hit=532
+ Planning:
+   Buffers: shared hit=192
+ Planning Time: 0.776 ms
+ Execution Time: 1.656 ms
+(9 rows)
+

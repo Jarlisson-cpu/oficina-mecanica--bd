@@ -1,0 +1,19 @@
+SET search_path TO oficina
+timing on
+-- C01 Histórico do veículo pela placa (recepção): últimas 5 OS com valor total
+SELECT t.id_os, t.data_abertura::date AS abertura, t.status, t.mecanico,
+       t.total_pecas, t.valor_mao_obra, t.valor_total
+  FROM vw_os_total t
+ WHERE t.placa = 'DAB7E42'
+ ORDER BY t.data_abertura DESC
+ LIMIT 5;
+ id_os  |  abertura  |  status   |       mecanico        | total_pecas | valor_mao_obra | valor_total 
+--------+------------+-----------+-----------------------+-------------+----------------+-------------
+ 231075 | 2026-08-11 | CONCLUIDA | Mecânico Ivanildo 21  |      743.34 |         409.50 |     1152.84
+ 212775 | 2026-05-27 | CONCLUIDA | Mecânico Jailson 10   |      745.80 |         151.20 |      897.00
+ 165032 | 2026-03-29 | CONCLUIDA | Mecânico Cícero 15    |      361.31 |         380.40 |      741.71
+ 151792 | 2026-01-22 | CONCLUIDA | Mecânico Francisco 18 |      703.90 |         426.30 |     1130.20
+  84788 | 2025-08-22 | CONCLUIDA | Mecânico Heleno 20    |     1550.98 |         448.80 |     1999.78
+(5 rows)
+
+Time: 4.694 ms

@@ -1,0 +1,5 @@
+-- T06 [Tipo] Valor acima de NUMERIC(10,2) é rejeitado
+-- Esperado: ERRO 22003
+UPDATE peca SET preco_venda = 123456789.00 WHERE id_peca = 1;
+psql:testes/T06_valor_acima_de_numeric_10_2_e_rejeitado.sql:3: ERROR:  22003: numeric field overflow
+DETAIL:  A field with precision 10, scale 2 must round to an absolute value less than 10^8.

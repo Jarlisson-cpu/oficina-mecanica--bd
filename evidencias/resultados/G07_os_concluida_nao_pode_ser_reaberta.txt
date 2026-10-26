@@ -1,0 +1,5 @@
+-- G07 [Regra] OS CONCLUIDA não pode ser reaberta
+-- Esperado: ERRO P0001
+UPDATE ordem_servico SET status = 'ABERTA', data_conclusao = NULL
+ WHERE id_os = (SELECT min(id_os) FROM ordem_servico WHERE status = 'CONCLUIDA');
+psql:testes/G07_os_concluida_nao_pode_ser_reaberta.sql:4: ERROR:  P0001: OS 1 já está CONCLUIDA e não pode mudar para ABERTA

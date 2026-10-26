@@ -1,0 +1,8 @@
+-- T10 [Tipo] CPF com pontuação viola o domínio dm_doc
+-- Esperado: ERRO 23514
+INSERT INTO cliente (nome, cpf_cnpj, telefone)
+VALUES ('Maria Teste', '123.456.789-0', '79999990000');
+psql:testes/T10_cpf_com_pontuacao_viola_o_dominio_dm_doc.sql:4: ERROR:  23514: value for domain dm_doc violates check constraint "dm_doc_check"
+SCHEMA NAME:  oficina
+DATATYPE NAME:  dm_doc
+CONSTRAINT NAME:  dm_doc_check

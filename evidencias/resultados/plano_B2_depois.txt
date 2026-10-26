@@ -1,0 +1,19 @@
+-- B2 Painel: 50 OS pendentes mais antigas (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT id_os, data_abertura, status FROM ordem_servico
+ WHERE status IN ('ABERTA','EM_EXECUCAO','AGUARDANDO_PECA')
+ ORDER BY data_abertura LIMIT 50;
+
+SET
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Limit (actual time=0.028..0.244 rows=50 loops=1)
+   Buffers: shared hit=52
+   ->  Index Scan using ix_os_pendentes on ordem_servico (actual time=0.027..0.239 rows=50 loops=1)
+         Buffers: shared hit=52
+ Planning:
+   Buffers: shared hit=188
+ Planning Time: 0.694 ms
+ Execution Time: 0.262 ms
+(8 rows)
+

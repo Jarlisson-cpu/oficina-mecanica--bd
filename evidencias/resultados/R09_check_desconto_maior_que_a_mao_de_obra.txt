@@ -1,0 +1,9 @@
+-- R09 [Restrição] CHECK: desconto maior que a mão de obra
+-- Esperado: ERRO 23514
+UPDATE ordem_servico SET desconto = valor_mao_obra + 1
+ WHERE id_os = (SELECT min(id_os) FROM ordem_servico WHERE status = 'CONCLUIDA');
+psql:testes/R09_check_desconto_maior_que_a_mao_de_obra.sql:4: ERROR:  23514: new row for relation "ordem_servico" violates check constraint "ck_os_desconto"
+DETAIL:  Failing row contains (1, 29732, 14, 2022-12-20 00:54:58.278778, 2022-12-22 14:31:36.797914, CONCLUIDA, 77000, Revisão dos 10.000 km, 3.27, 392.40, 393.40).
+SCHEMA NAME:  oficina
+TABLE NAME:  ordem_servico
+CONSTRAINT NAME:  ck_os_desconto

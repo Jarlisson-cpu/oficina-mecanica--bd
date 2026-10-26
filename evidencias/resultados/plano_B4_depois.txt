@@ -1,0 +1,23 @@
+-- B4 Faturamento de mão de obra em set/2026 (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT sum(valor_mao_obra - desconto) FROM ordem_servico
+ WHERE data_conclusao >= '2026-09-01' AND data_conclusao < '2026-10-01';
+
+SET
+                                                                                  QUERY PLAN                                                                                  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate (actual time=6.478..6.480 rows=1 loops=1)
+   Buffers: shared hit=2590
+   ->  Bitmap Heap Scan on ordem_servico (actual time=0.985..5.250 rows=4079 loops=1)
+         Recheck Cond: ((data_conclusao >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_conclusao < '2026-10-01 00:00:00'::timestamp without time zone))
+         Heap Blocks: exact=2576
+         Buffers: shared hit=2590
+         ->  Bitmap Index Scan on ix_os_conclusao (actual time=0.629..0.629 rows=4079 loops=1)
+               Index Cond: ((data_conclusao >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_conclusao < '2026-10-01 00:00:00'::timestamp without time zone))
+               Buffers: shared hit=14
+ Planning:
+   Buffers: shared hit=184
+ Planning Time: 0.603 ms
+ Execution Time: 6.583 ms
+(13 rows)
+

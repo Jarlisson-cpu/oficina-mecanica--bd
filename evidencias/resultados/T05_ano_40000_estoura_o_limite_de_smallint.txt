@@ -1,0 +1,5 @@
+-- T05 [Tipo] Ano 40000 estoura o limite de SMALLINT
+-- Esperado: ERRO 22003
+INSERT INTO veiculo (id_cliente, placa, chassi, marca, modelo, ano)
+VALUES (1, 'QWE1235', '9BWZZZ00000099905', 'Fiat', 'Uno', 40000);
+psql:testes/T05_ano_40000_estoura_o_limite_de_smallint.sql:4: ERROR:  22003: smallint out of range

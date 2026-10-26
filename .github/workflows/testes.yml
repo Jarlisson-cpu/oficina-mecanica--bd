@@ -1,0 +1,38 @@
+name: Testes do banco (PostgreSQL 16)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: oficina
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: oficina
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Criar banco, carregar dados e rodar todos os testes
+        run: ./scripts/rodar_tudo.sh
+      - name: Publicar evidências geradas nesta execução
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias
+          path: evidencias/

@@ -1,0 +1,31 @@
+-- B2 Painel: 50 OS pendentes mais antigas (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT id_os, data_abertura, status FROM ordem_servico
+ WHERE status IN ('ABERTA','EM_EXECUCAO','AGUARDANDO_PECA')
+ ORDER BY data_abertura LIMIT 50;
+
+SET
+                                            QUERY PLAN                                             
+---------------------------------------------------------------------------------------------------
+ Limit (actual time=22.717..25.249 rows=50 loops=1)
+   Buffers: shared hit=8276
+   ->  Gather Merge (actual time=22.715..25.242 rows=50 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=8276
+         ->  Sort (actual time=16.447..16.453 rows=45 loops=3)
+               Sort Key: data_abertura
+               Sort Method: top-N heapsort  Memory: 30kB
+               Buffers: shared hit=8276
+               Worker 0:  Sort Method: top-N heapsort  Memory: 30kB
+               Worker 1:  Sort Method: top-N heapsort  Memory: 31kB
+               ->  Parallel Seq Scan on ordem_servico (actual time=1.102..16.146 rows=947 loops=3)
+                     Filter: (status = ANY ('{ABERTA,EM_EXECUCAO,AGUARDANDO_PECA}'::status_os[]))
+                     Rows Removed by Filter: 99053
+                     Buffers: shared hit=8204
+ Planning:
+   Buffers: shared hit=107
+ Planning Time: 0.953 ms
+ Execution Time: 25.311 ms
+(20 rows)
+

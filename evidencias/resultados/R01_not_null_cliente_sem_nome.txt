@@ -1,0 +1,9 @@
+-- R01 [Restrição] NOT NULL: cliente sem nome
+-- Esperado: ERRO 23502
+INSERT INTO cliente (nome, cpf_cnpj, telefone)
+VALUES (NULL, '98765432100', '79999990000');
+psql:testes/R01_not_null_cliente_sem_nome.sql:4: ERROR:  23502: null value in column "nome" of relation "cliente" violates not-null constraint
+DETAIL:  Failing row contains (20007, null, 98765432100, 79999990000, null, 2026-10-26).
+SCHEMA NAME:  oficina
+TABLE NAME:  cliente
+COLUMN NAME:  nome

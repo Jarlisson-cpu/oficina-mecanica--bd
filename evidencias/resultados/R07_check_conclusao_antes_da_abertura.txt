@@ -1,0 +1,9 @@
+-- R07 [Restrição] CHECK: conclusão antes da abertura
+-- Esperado: ERRO 23514
+UPDATE ordem_servico SET data_conclusao = data_abertura - INTERVAL '1 day'
+ WHERE id_os = (SELECT min(id_os) FROM ordem_servico WHERE status = 'CONCLUIDA');
+psql:testes/R07_check_conclusao_antes_da_abertura.sql:4: ERROR:  23514: new row for relation "ordem_servico" violates check constraint "ck_os_datas"
+DETAIL:  Failing row contains (1, 29732, 14, 2022-12-20 00:54:58.278778, 2022-12-19 00:54:58.278778, CONCLUIDA, 77000, Revisão dos 10.000 km, 3.27, 392.40, 19.62).
+SCHEMA NAME:  oficina
+TABLE NAME:  ordem_servico
+CONSTRAINT NAME:  ck_os_datas

@@ -1,0 +1,25 @@
+-- B9 Somar mão de obra das OS ABERTAS (0,2% da tabela) (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT sum(valor_mao_obra) FROM ordem_servico WHERE status = 'ABERTA';
+
+SET
+                                            QUERY PLAN                                             
+---------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=20.952..23.441 rows=1 loops=1)
+   Buffers: shared hit=8204
+   ->  Gather (actual time=19.868..23.423 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=8204
+         ->  Partial Aggregate (actual time=14.155..14.156 rows=1 loops=3)
+               Buffers: shared hit=8204
+               ->  Parallel Seq Scan on ordem_servico (actual time=1.277..14.093 rows=191 loops=3)
+                     Filter: (status = 'ABERTA'::status_os)
+                     Rows Removed by Filter: 99809
+                     Buffers: shared hit=8204
+ Planning:
+   Buffers: shared hit=76
+ Planning Time: 0.462 ms
+ Execution Time: 23.551 ms
+(16 rows)
+

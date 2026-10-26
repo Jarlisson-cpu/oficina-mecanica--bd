@@ -1,0 +1,30 @@
+SET search_path TO oficina
+timing on
+-- C03 Ranking de mecânicos em 2026: OS concluídas, horas, tempo médio e faturamento
+SELECT RANK() OVER (ORDER BY sum(os.valor_mao_obra) DESC)                AS pos,
+       m.nome, m.especialidade,
+       count(*)                                                          AS os_concluidas,
+       sum(os.horas_trabalhadas)                                         AS horas,
+       round(avg(EXTRACT(EPOCH FROM os.data_conclusao - os.data_abertura) / 86400)::numeric, 1) AS dias_medios,
+       sum(os.valor_mao_obra)                                            AS mao_de_obra
+  FROM ordem_servico os
+  JOIN mecanico m USING (id_mecanico)
+ WHERE os.status = 'CONCLUIDA' AND os.data_abertura >= '2026-01-01'
+ GROUP BY m.id_mecanico, m.nome, m.especialidade
+ ORDER BY pos
+ LIMIT 10;
+ pos |         nome          |  especialidade  | os_concluidas |  horas  | dias_medios | mao_de_obra 
+-----+-----------------------+-----------------+---------------+---------+-------------+-------------
+   1 | Mecânico Genivaldo 19 | AR_CONDICIONADO |          1858 | 7923.23 |         5.6 |   950787.60
+   2 | Mecânico Edvaldo 4    | INJECAO         |          1822 | 7707.86 |         5.4 |   924943.20
+   3 | Mecânico Benedito 14  | MOTOR           |          1829 | 7665.24 |         5.5 |   919828.80
+   4 | Mecânico José 9       | FREIOS          |          1757 | 7485.90 |         5.4 |   898308.00
+   5 | Mecânico Francisco 18 | INJECAO         |          1860 | 7688.87 |         5.7 |   807331.35
+   6 | Mecânico Ivanildo 8   | SUSPENSAO       |          1796 | 7645.58 |         5.4 |   802785.90
+   7 | Mecânico Damião 3     | ELETRICA        |          1754 | 7474.32 |         5.4 |   784803.60
+   8 | Mecânico Antônio 13   | GERAL           |          1767 | 7449.35 |         5.6 |   782181.75
+   9 | Mecânico Manoel 12    | AR_CONDICIONADO |          1831 | 7872.21 |         5.5 |   708498.90
+  10 | Mecânico Cícero 2     | FREIOS          |          1860 | 7748.44 |         5.6 |   697359.60
+(10 rows)
+
+Time: 44.776 ms

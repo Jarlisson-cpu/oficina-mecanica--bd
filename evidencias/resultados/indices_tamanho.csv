@@ -1,0 +1,9 @@
+indice;tamanho
+ix_cliente_nome_trgm;824 kB
+ix_os_conclusao;7096 kB
+ix_os_mecanico_data;9968 kB
+ix_os_peca_peca;3160 kB
+ix_os_pendentes;464 kB
+ix_os_status;2792 kB
+ix_os_veiculo_data;15 MB
+ix_veiculo_cliente;1280 kB

@@ -1,0 +1,22 @@
+-- B5 Consumo total de uma peça (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT count(*), sum(quantidade) FROM os_peca WHERE id_peca = 137;
+
+SET
+                                          QUERY PLAN                                          
+----------------------------------------------------------------------------------------------
+ Aggregate (actual time=2.380..2.382 rows=1 loops=1)
+   Buffers: shared hit=611
+   ->  Bitmap Heap Scan on os_peca (actual time=0.158..2.296 rows=939 loops=1)
+         Recheck Cond: (id_peca = 137)
+         Heap Blocks: exact=607
+         Buffers: shared hit=611
+         ->  Bitmap Index Scan on ix_os_peca_peca (actual time=0.091..0.091 rows=939 loops=1)
+               Index Cond: (id_peca = 137)
+               Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=92
+ Planning Time: 0.650 ms
+ Execution Time: 2.520 ms
+(13 rows)
+

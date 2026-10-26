@@ -1,0 +1,35 @@
+id,categoria,descricao,esperado,obtido,mensagem_do_banco,resultado
+T01,Tipo,Placa com 8 caracteres não cabe em CHAR(7),ERRO 22001,ERRO 22001,value too long for type character(7),PASSOU
+T02,Tipo,Placa fora do padrão (domínio dm_placa),ERRO 23514,ERRO 23514,"value for domain dm_placa violates check constraint ""dm_placa_check""",PASSOU
+T03,Tipo,Placa Mercosul válida é aceita,OK,OK,verificação = PASSOU,PASSOU
+T04,Tipo,Texto em coluna SMALLINT (ano),ERRO 22P02,ERRO 22P02,"invalid input syntax for type smallint: ""dois mil""",PASSOU
+T05,Tipo,Ano 40000 estoura o limite de SMALLINT,ERRO 22003,ERRO 22003,smallint out of range,PASSOU
+T06,Tipo,"Valor acima de NUMERIC(10,2) é rejeitado",ERRO 22003,ERRO 22003,numeric field overflow,PASSOU
+T07,Tipo,"NUMERIC(10,2) arredonda 10,555 para 10,56 (sem erro de ponto flutuante)",OK,OK,verificação = PASSOU,PASSOU
+T08,Tipo,Status fora do ENUM status_os,ERRO 22P02,ERRO 22P02,"invalid input value for enum status_os: ""FINALIZADA""",PASSOU
+T09,Tipo,Data inexistente (30/02) em TIMESTAMP,ERRO 22008,ERRO 22008,"date/time field value out of range: ""2026-02-30 10:00""",PASSOU
+T10,Tipo,CPF com pontuação viola o domínio dm_doc,ERRO 23514,ERRO 23514,"value for domain dm_doc violates check constraint ""dm_doc_check""",PASSOU
+T11,Tipo,Telefone com letras viola o domínio dm_telefone,ERRO 23514,ERRO 23514,"value for domain dm_telefone violates check constraint ""dm_telefone_check""",PASSOU
+R01,Restrição,NOT NULL: cliente sem nome,ERRO 23502,ERRO 23502,"null value in column ""nome"" of relation ""cliente"" violates not-null constraint",PASSOU
+R02,Restrição,UNIQUE: CPF/CNPJ repetido,ERRO 23505,ERRO 23505,"duplicate key value violates unique constraint ""uq_cliente_doc""",PASSOU
+R03,Restrição,UNIQUE: placa repetida,ERRO 23505,ERRO 23505,"duplicate key value violates unique constraint ""uq_veiculo_placa""",PASSOU
+R04,Restrição,FOREIGN KEY: veículo de cliente inexistente,ERRO 23503,ERRO 23503,"insert or update on table ""veiculo"" violates foreign key constraint ""veiculo_id_cliente_fkey""",PASSOU
+R05,Restrição,ON DELETE RESTRICT: excluir cliente que tem veículos,ERRO 23503,ERRO 23503,"update or delete on table ""cliente"" violates foreign key constraint ""veiculo_id_cliente_fkey"" on table ""veiculo""",PASSOU
+R06,Restrição,CHECK: km do veículo negativo,ERRO 23514,ERRO 23514,"new row for relation ""veiculo"" violates check constraint ""veiculo_km_atual_check""",PASSOU
+R07,Restrição,CHECK: conclusão antes da abertura,ERRO 23514,ERRO 23514,"new row for relation ""ordem_servico"" violates check constraint ""ck_os_datas""",PASSOU
+R08,Restrição,CHECK: OS CONCLUIDA sem data de conclusão,ERRO 23514,ERRO 23514,"new row for relation ""ordem_servico"" violates check constraint ""ck_os_concluida""",PASSOU
+R09,Restrição,CHECK: desconto maior que a mão de obra,ERRO 23514,ERRO 23514,"new row for relation ""ordem_servico"" violates check constraint ""ck_os_desconto""",PASSOU
+R10,Restrição,PRIMARY KEY composta: mesma peça duas vezes na OS,ERRO 23505,ERRO 23505,"duplicate key value violates unique constraint ""pk_os_peca""",PASSOU
+R11,Restrição,CHECK: quantidade zero de peça,ERRO 23514,ERRO 23514,"new row for relation ""os_peca"" violates check constraint ""os_peca_quantidade_check""",PASSOU
+R12,Restrição,CHECK: e-mail sem @,ERRO 23514,ERRO 23514,"new row for relation ""cliente"" violates check constraint ""cliente_email_check""",PASSOU
+R13,Restrição,ON DELETE CASCADE: excluir OS aberta remove seus itens,OK,OK,verificação = PASSOU,PASSOU
+G01,Regra,Lançar peça na OS baixa o estoque automaticamente,OK,OK,verificação = PASSOU,PASSOU
+G02,Regra,Estoque insuficiente bloqueia o lançamento,ERRO 23514,ERRO 23514,"new row for relation ""peca"" violates check constraint ""ck_peca_estoque_nao_negativo""",PASSOU
+G03,Regra,Preço da peça é copiado do catálogo quando omitido,OK,OK,verificação = PASSOU,PASSOU
+G04,Regra,OS CONCLUIDA não aceita novas peças,ERRO P0001,ERRO P0001,OS 1 está CONCLUIDA e não aceita alteração de peças,PASSOU
+G05,Regra,Mecânico inativo não pode assumir OS,ERRO P0001,ERRO P0001,Mecânico 23 está inativo e não pode assumir OS,PASSOU
+G06,Regra,Hodômetro não pode voltar (km_entrada < km_atual),ERRO P0001,ERRO P0001,km_entrada (72000) menor que o km já registrado do veículo (73000),PASSOU
+G07,Regra,OS CONCLUIDA não pode ser reaberta,ERRO P0001,ERRO P0001,OS 1 já está CONCLUIDA e não pode mudar para ABERTA,PASSOU
+G08,Regra,Cancelar a OS devolve as peças ao estoque,OK,OK,verificação = PASSOU,PASSOU
+G09,Regra,Mão de obra = horas trabalhadas x valor/hora do mecânico,OK,OK,verificação = PASSOU,PASSOU
+G10,Regra,"Fluxo completo: abrir, lançar peças, concluir e faturar",OK,OK,verificação = PASSOU,PASSOU

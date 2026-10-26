@@ -1,0 +1,17 @@
+-- B7 Busca de cliente por parte do nome (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT id_cliente, nome FROM cliente WHERE nome ILIKE '%teles dantas%';
+
+SET
+                            QUERY PLAN                            
+------------------------------------------------------------------
+ Seq Scan on cliente (actual time=0.045..11.353 rows=148 loops=1)
+   Filter: ((nome)::text ~~* '%teles dantas%'::text)
+   Rows Removed by Filter: 19852
+   Buffers: shared hit=266
+ Planning:
+   Buffers: shared hit=71
+ Planning Time: 0.465 ms
+ Execution Time: 11.397 ms
+(8 rows)
+

@@ -1,0 +1,37 @@
+-- B1 Histórico de OS de um veículo pela placa (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT os.id_os, os.data_abertura, os.status, os.km_entrada, os.descricao_problema
+  FROM ordem_servico os JOIN veiculo v USING (id_veiculo)
+ WHERE v.placa = 'DAB7E42'
+ ORDER BY os.data_abertura DESC;
+
+SET
+                                                    QUERY PLAN                                                    
+------------------------------------------------------------------------------------------------------------------
+ Gather Merge (actual time=26.626..30.871 rows=26 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=8323
+   ->  Sort (actual time=21.961..21.964 rows=9 loops=3)
+         Sort Key: os.data_abertura DESC
+         Sort Method: quicksort  Memory: 25kB
+         Buffers: shared hit=8323
+         Worker 0:  Sort Method: quicksort  Memory: 25kB
+         Worker 1:  Sort Method: quicksort  Memory: 26kB
+         ->  Hash Join (actual time=12.761..21.927 rows=9 loops=3)
+               Hash Cond: (os.id_veiculo = v.id_veiculo)
+               Buffers: shared hit=8309
+               ->  Parallel Seq Scan on ordem_servico os (actual time=1.012..10.396 rows=100000 loops=3)
+                     Buffers: shared hit=8204
+               ->  Hash (actual time=0.043..0.044 rows=1 loops=3)
+                     Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                     Buffers: shared hit=11
+                     ->  Index Scan using uq_veiculo_placa on veiculo v (actual time=0.034..0.035 rows=1 loops=3)
+                           Index Cond: ((placa)::bpchar = 'DAB7E42'::bpchar)
+                           Buffers: shared hit=11
+ Planning:
+   Buffers: shared hit=247
+ Planning Time: 0.634 ms
+ Execution Time: 30.949 ms
+(25 rows)
+

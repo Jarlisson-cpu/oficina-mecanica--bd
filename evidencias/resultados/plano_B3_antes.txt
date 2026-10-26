@@ -1,0 +1,26 @@
+-- B3 Produção de um mecânico em set/2026 (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT count(*), sum(horas_trabalhadas) FROM ordem_servico
+ WHERE id_mecanico = 5 AND data_abertura >= '2026-09-01' AND data_abertura < '2026-10-01';
+
+SET
+                                                                                             QUERY PLAN                                                                                             
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=26.398..31.382 rows=1 loops=1)
+   Buffers: shared hit=8204
+   ->  Gather (actual time=24.564..31.361 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=8204
+         ->  Partial Aggregate (actual time=20.065..20.066 rows=1 loops=3)
+               Buffers: shared hit=8204
+               ->  Parallel Seq Scan on ordem_servico (actual time=1.583..20.015 rows=67 loops=3)
+                     Filter: ((data_abertura >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_abertura < '2026-10-01 00:00:00'::timestamp without time zone) AND (id_mecanico = 5))
+                     Rows Removed by Filter: 99933
+                     Buffers: shared hit=8204
+ Planning:
+   Buffers: shared hit=100
+ Planning Time: 0.518 ms
+ Execution Time: 31.517 ms
+(16 rows)
+

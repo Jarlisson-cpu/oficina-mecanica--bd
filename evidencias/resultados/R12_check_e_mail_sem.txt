@@ -1,0 +1,8 @@
+-- R12 [Restrição] CHECK: e-mail sem @
+-- Esperado: ERRO 23514
+UPDATE cliente SET email = 'cliente.email.com' WHERE id_cliente = 1;
+psql:testes/R12_check_e_mail_sem.sql:3: ERROR:  23514: new row for relation "cliente" violates check constraint "cliente_email_check"
+DETAIL:  Failing row contains (1, Bruno Oliveira Silva, 00000000001, 79900000001, cliente.email.com, 2024-04-09).
+SCHEMA NAME:  oficina
+TABLE NAME:  cliente
+CONSTRAINT NAME:  cliente_email_check

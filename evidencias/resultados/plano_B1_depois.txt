@@ -1,0 +1,28 @@
+-- B1 Histórico de OS de um veículo pela placa (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT os.id_os, os.data_abertura, os.status, os.km_entrada, os.descricao_problema
+  FROM ordem_servico os JOIN veiculo v USING (id_veiculo)
+ WHERE v.placa = 'DAB7E42'
+ ORDER BY os.data_abertura DESC;
+
+SET
+                                                   QUERY PLAN                                                   
+----------------------------------------------------------------------------------------------------------------
+ Sort (actual time=0.175..0.178 rows=26 loops=1)
+   Sort Key: os.data_abertura DESC
+   Sort Method: quicksort  Memory: 26kB
+   Buffers: shared hit=31
+   ->  Nested Loop (actual time=0.094..0.137 rows=26 loops=1)
+         Buffers: shared hit=28
+         ->  Index Scan using uq_veiculo_placa on veiculo v (actual time=0.065..0.065 rows=1 loops=1)
+               Index Cond: ((placa)::bpchar = 'DAB7E42'::bpchar)
+               Buffers: shared hit=3
+         ->  Index Scan using ix_os_veiculo_data on ordem_servico os (actual time=0.023..0.060 rows=26 loops=1)
+               Index Cond: (id_veiculo = v.id_veiculo)
+               Buffers: shared hit=25
+ Planning:
+   Buffers: shared hit=358
+ Planning Time: 1.356 ms
+ Execution Time: 0.254 ms
+(16 rows)
+

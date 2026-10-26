@@ -1,0 +1,25 @@
+-- B8 Somar mão de obra das OS CONCLUIDAS (95% da tabela) (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT sum(valor_mao_obra) FROM ordem_servico WHERE status = 'CONCLUIDA';
+
+SET
+                                             QUERY PLAN                                              
+-----------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=43.951..46.170 rows=1 loops=1)
+   Buffers: shared hit=8204
+   ->  Gather (actual time=41.380..46.152 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=8204
+         ->  Partial Aggregate (actual time=37.713..37.714 rows=1 loops=3)
+               Buffers: shared hit=8204
+               ->  Parallel Seq Scan on ordem_servico (actual time=1.004..21.380 rows=95054 loops=3)
+                     Filter: (status = 'CONCLUIDA'::status_os)
+                     Rows Removed by Filter: 4946
+                     Buffers: shared hit=8204
+ Planning:
+   Buffers: shared hit=76
+ Planning Time: 0.334 ms
+ Execution Time: 46.262 ms
+(16 rows)
+

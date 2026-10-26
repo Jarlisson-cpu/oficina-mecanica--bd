@@ -1,0 +1,9 @@
+-- R02 [Restrição] UNIQUE: CPF/CNPJ repetido
+-- Esperado: ERRO 23505
+INSERT INTO cliente (nome, cpf_cnpj, telefone)
+SELECT 'Clone do cliente 1', cpf_cnpj, '79999990000' FROM cliente WHERE id_cliente = 1;
+psql:testes/R02_unique_cpf_cnpj_repetido.sql:4: ERROR:  23505: duplicate key value violates unique constraint "uq_cliente_doc"
+DETAIL:  Key (cpf_cnpj)=(00000000001) already exists.
+SCHEMA NAME:  oficina
+TABLE NAME:  cliente
+CONSTRAINT NAME:  uq_cliente_doc

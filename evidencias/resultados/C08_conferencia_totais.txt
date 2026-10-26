@@ -1,0 +1,18 @@
+SET search_path TO oficina
+timing on
+-- C08 Conferência: o total da view vw_os_total bate com a soma feita direto nas tabelas?
+SELECT (SELECT sum(valor_total) FROM vw_os_total WHERE status = 'CONCLUIDA') AS total_pela_view,
+       (SELECT sum(op.quantidade * op.preco_unitario)
+          FROM os_peca op JOIN ordem_servico os USING (id_os) WHERE os.status = 'CONCLUIDA')
+     + (SELECT sum(valor_mao_obra - desconto) FROM ordem_servico WHERE status = 'CONCLUIDA') AS total_pelas_tabelas,
+       CASE WHEN (SELECT sum(valor_total) FROM vw_os_total WHERE status = 'CONCLUIDA')
+               = (SELECT sum(op.quantidade * op.preco_unitario)
+                    FROM os_peca op JOIN ordem_servico os USING (id_os) WHERE os.status = 'CONCLUIDA')
+               + (SELECT sum(valor_mao_obra - desconto) FROM ordem_servico WHERE status = 'CONCLUIDA')
+            THEN 'PASSOU' ELSE 'FALHOU' END AS verificacao;
+ total_pela_view | total_pelas_tabelas | verificacao 
+-----------------+---------------------+-------------
+    216799627.25 |        216799627.25 | PASSOU
+(1 row)
+
+Time: 4636.552 ms (00:04.637)

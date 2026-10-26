@@ -1,0 +1,5 @@
+-- T01 [Tipo] Placa com 8 caracteres não cabe em CHAR(7)
+-- Esperado: ERRO 22001
+INSERT INTO veiculo (id_cliente, placa, chassi, marca, modelo, ano)
+VALUES (1, 'ABC12345', '9BWZZZ00000099901', 'Fiat', 'Uno', 2015);
+psql:testes/T01_placa_com_8_caracteres_nao_cabe_em_char_7.sql:4: ERROR:  22001: value too long for type character(7)

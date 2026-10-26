@@ -1,0 +1,17 @@
+-- B6 Veículos de um cliente (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT placa, marca, modelo FROM veiculo WHERE id_cliente = 4321;
+
+SET
+                          QUERY PLAN                           
+---------------------------------------------------------------
+ Seq Scan on veiculo (actual time=0.603..2.023 rows=2 loops=1)
+   Filter: (id_cliente = 4321)
+   Rows Removed by Filter: 29998
+   Buffers: shared hit=613
+ Planning:
+   Buffers: shared hit=98
+ Planning Time: 0.302 ms
+ Execution Time: 2.071 ms
+(8 rows)
+

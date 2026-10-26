@@ -1,0 +1,11 @@
+id,indice,consulta,ms_antes,ms_depois,ganho_x,paginas_antes,paginas_depois,acesso_antes,acesso_depois
+B1,I1 ix_os_veiculo_data,Histórico de OS de um veículo pela placa,30.600,0.254,120.5,8323,31,Seq Scan ordem_servico; Index Scan uq_veiculo_placa,Index Scan uq_veiculo_placa; Index Scan ix_os_veiculo_data
+B2,I2 ix_os_pendentes (parcial),Painel: 50 OS pendentes mais antigas,24.800,0.346,71.7,8276,52,Seq Scan ordem_servico,Index Scan ix_os_pendentes
+B3,I3 ix_os_mecanico_data,Produção de um mecânico em set/2026,24.317,0.844,28.8,8204,200,Seq Scan ordem_servico,Bitmap Index Scan ix_os_mecanico_data
+B4,I4 ix_os_conclusao,Faturamento de mão de obra em set/2026,23.524,6.277,3.7,8204,2590,Seq Scan ordem_servico,Bitmap Index Scan ix_os_conclusao
+B5,I5 ix_os_peca_peca,Consumo total de uma peça,29.245,2.555,11.4,2870,611,Seq Scan os_peca,Bitmap Index Scan ix_os_peca_peca
+B6,I6 ix_veiculo_cliente,Veículos de um cliente,2.001,0.135,14.8,613,4,Seq Scan veiculo,Index Scan ix_veiculo_cliente
+B7,I7 ix_cliente_nome_trgm (GIN),Busca de cliente por parte do nome,12.038,0.973,12.4,266,174,Seq Scan cliente,Bitmap Index Scan ix_cliente_nome_trgm
+B8,I8 ix_os_status (contraexemplo),Somar mão de obra das OS CONCLUIDAS (95% da tabela),46.316,49.088,0.9,8204,8204,Seq Scan ordem_servico,Seq Scan ordem_servico
+B9,I8 ix_os_status,"Somar mão de obra das OS ABERTAS (0,2% da tabela)",25.462,1.590,16.0,8204,532,Seq Scan ordem_servico,Index Scan ix_os_status
+W1,todos,INSERT de 20.000 OS (custo de escrita),1250.4,1577.5,0.79,,,,

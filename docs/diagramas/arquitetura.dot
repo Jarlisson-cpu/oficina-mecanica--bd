@@ -1,0 +1,25 @@
+digraph G {
+  rankdir=LR; nodesep=0.35; ranksep=0.9; splines=spline;
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, fillcolor="#f2f2f2", color="#777777"];
+  edge [color="#555555", fontname="DejaVu Sans", fontsize=10];
+  subgraph cluster_u { label="Usuários da oficina"; fontname="DejaVu Sans Bold"; color="#999999"; style=rounded;
+    R [label="Recepção\nabre OS, busca placa/cliente"];
+    M [label="Mecânico\nlança peças e horas"];
+    G [label="Gerência\nrelatórios e indicadores"]; }
+  subgraph cluster_db { label="PostgreSQL 16 — schema oficina"; fontname="DejaVu Sans Bold"; color="#3a6ea5"; style=rounded;
+    D [label="Domínios + ENUM\n(dm_placa, dm_doc, status_os)", fillcolor="#dde8f5"];
+    T [label="6 tabelas\nPK · FK · UNIQUE · CHECK", fillcolor="#dde8f5"];
+    TR [label="Triggers de regra\nestoque · hodômetro\nciclo da OS · mão de obra", fillcolor="#dde8f5"];
+    V [label="View vw_os_total", fillcolor="#dde8f5"];
+    I [label="8 índices\nB-tree · parcial · GIN trigram", fillcolor="#dde8f5"];
+    D -> T; T -> TR; T -> V; T -> I [dir=none, style=dashed]; }
+  subgraph cluster_gh { label="Repositório GitHub"; fontname="DejaVu Sans Bold"; color="#2f7d32"; style=rounded;
+    K [label="Projects (Kanban)\nIssues · Sprints (milestones)", fillcolor="#e3f1e4"];
+    S [label="sql/01–04\nDDL · regras · carga · índices", fillcolor="#e3f1e4"];
+    TS [label="executar_testes.py (34 casos)\nmedir_indices.py · consultas/", fillcolor="#e3f1e4"];
+    CI [label="GitHub Actions\nroda tudo a cada push", fillcolor="#e3f1e4"];
+    E [label="evidencias/\nCSV · logs · capturas PNG", fillcolor="#e3f1e4"];
+    CI -> TS; TS -> E; }
+  R -> T; M -> TR; G -> V;
+  S -> D [label="cria"]; TS -> T [label="testa"];
+}

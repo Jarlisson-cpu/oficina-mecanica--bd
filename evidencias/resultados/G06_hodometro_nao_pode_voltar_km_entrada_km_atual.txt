@@ -1,0 +1,5 @@
+-- G06 [Regra] Hodômetro não pode voltar (km_entrada < km_atual)
+-- Esperado: ERRO P0001
+INSERT INTO ordem_servico (id_veiculo, id_mecanico, km_entrada, descricao_problema)
+VALUES (1, 1, (SELECT km_atual - 1000 FROM veiculo WHERE id_veiculo = 1), 'Revisão geral');
+psql:testes/G06_hodometro_nao_pode_voltar_km_entrada_km_atual.sql:4: ERROR:  P0001: km_entrada (72000) menor que o km já registrado do veículo (73000)

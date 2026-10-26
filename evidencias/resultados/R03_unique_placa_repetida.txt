@@ -1,0 +1,9 @@
+-- R03 [Restrição] UNIQUE: placa repetida
+-- Esperado: ERRO 23505
+INSERT INTO veiculo (id_cliente, placa, chassi, marca, modelo, ano)
+SELECT 2, placa, '9BWZZZ00000099906', 'Fiat', 'Uno', 2015 FROM veiculo WHERE id_veiculo = 1;
+psql:testes/R03_unique_placa_repetida.sql:4: ERROR:  23505: duplicate key value violates unique constraint "uq_veiculo_placa"
+DETAIL:  Key (placa)=(CYY0H01) already exists.
+SCHEMA NAME:  oficina
+TABLE NAME:  veiculo
+CONSTRAINT NAME:  uq_veiculo_placa

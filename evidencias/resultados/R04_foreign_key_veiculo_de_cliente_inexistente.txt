@@ -1,0 +1,9 @@
+-- R04 [Restrição] FOREIGN KEY: veículo de cliente inexistente
+-- Esperado: ERRO 23503
+INSERT INTO veiculo (id_cliente, placa, chassi, marca, modelo, ano)
+VALUES (999999, 'ZZZ9Z99', '9BWZZZ00000099907', 'Fiat', 'Uno', 2015);
+psql:testes/R04_foreign_key_veiculo_de_cliente_inexistente.sql:4: ERROR:  23503: insert or update on table "veiculo" violates foreign key constraint "veiculo_id_cliente_fkey"
+DETAIL:  Key (id_cliente)=(999999) is not present in table "cliente".
+SCHEMA NAME:  oficina
+TABLE NAME:  veiculo
+CONSTRAINT NAME:  veiculo_id_cliente_fkey

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+artigo/*.aux
+artigo/*.log
+artigo/*.out
+.DS_Store

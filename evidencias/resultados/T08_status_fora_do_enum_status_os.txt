@@ -1,0 +1,6 @@
+-- T08 [Tipo] Status fora do ENUM status_os
+-- Esperado: ERRO 22P02
+UPDATE ordem_servico SET status = 'FINALIZADA' WHERE id_os = 1;
+psql:testes/T08_status_fora_do_enum_status_os.sql:3: ERROR:  22P02: invalid input value for enum status_os: "FINALIZADA"
+LINE 1: UPDATE ordem_servico SET status = 'FINALIZADA' WHERE id_os =...
+                                          ^

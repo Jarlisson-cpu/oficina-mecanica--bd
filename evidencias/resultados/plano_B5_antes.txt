@@ -1,0 +1,25 @@
+-- B5 Consumo total de uma peça (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT count(*), sum(quantidade) FROM os_peca WHERE id_peca = 137;
+
+SET
+                                         QUERY PLAN                                          
+---------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=25.350..29.139 rows=1 loops=1)
+   Buffers: shared hit=2870
+   ->  Gather (actual time=25.143..29.127 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=2870
+         ->  Partial Aggregate (actual time=22.720..22.721 rows=1 loops=2)
+               Buffers: shared hit=2870
+               ->  Parallel Seq Scan on os_peca (actual time=0.093..22.624 rows=470 loops=2)
+                     Filter: (id_peca = 137)
+                     Rows Removed by Filter: 224748
+                     Buffers: shared hit=2870
+ Planning:
+   Buffers: shared hit=79
+ Planning Time: 0.451 ms
+ Execution Time: 29.325 ms
+(16 rows)
+

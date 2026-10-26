@@ -1,0 +1,23 @@
+-- B3 Produção de um mecânico em set/2026 (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT count(*), sum(horas_trabalhadas) FROM ordem_servico
+ WHERE id_mecanico = 5 AND data_abertura >= '2026-09-01' AND data_abertura < '2026-10-01';
+
+SET
+                                                                                            QUERY PLAN                                                                                            
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate (actual time=1.511..1.512 rows=1 loops=1)
+   Buffers: shared hit=200
+   ->  Bitmap Heap Scan on ordem_servico (actual time=0.058..1.462 rows=200 loops=1)
+         Recheck Cond: ((id_mecanico = 5) AND (data_abertura >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_abertura < '2026-10-01 00:00:00'::timestamp without time zone))
+         Heap Blocks: exact=196
+         Buffers: shared hit=200
+         ->  Bitmap Index Scan on ix_os_mecanico_data (actual time=0.028..0.029 rows=200 loops=1)
+               Index Cond: ((id_mecanico = 5) AND (data_abertura >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_abertura < '2026-10-01 00:00:00'::timestamp without time zone))
+               Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=191
+ Planning Time: 0.880 ms
+ Execution Time: 1.577 ms
+(13 rows)
+

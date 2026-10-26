@@ -1,0 +1,12 @@
+-- G08 [Regra] Cancelar a OS devolve as peças ao estoque
+-- Esperado: OK
+SELECT qtd_estoque AS estoque_inicial FROM peca WHERE id_peca = 40 \gset
+INSERT INTO ordem_servico (id_veiculo, id_mecanico, km_entrada, descricao_problema)
+VALUES (1, 1, (SELECT km_atual + 500 FROM veiculo WHERE id_veiculo = 1), 'Teste de bancada')
+RETURNING id_os AS os \gset
+INSERT INTO os_peca (id_os, id_peca, quantidade) VALUES (:os, 40, 3);
+SELECT qtd_estoque AS apos_lancar FROM peca WHERE id_peca = 40;
+UPDATE ordem_servico SET status = 'CANCELADA' WHERE id_os = :os;
+SELECT :estoque_inicial AS inicial, qtd_estoque AS apos_cancelar,
+       CASE WHEN qtd_estoque = :estoque_inicial THEN 'PASSOU' ELSE 'FALHOU' END AS verificacao
+  FROM peca WHERE id_peca = 40;

@@ -1,0 +1,20 @@
+-- B7 Busca de cliente por parte do nome (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT id_cliente, nome FROM cliente WHERE nome ILIKE '%teles dantas%';
+
+SET
+                                         QUERY PLAN                                          
+---------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on cliente (actual time=0.481..0.883 rows=148 loops=1)
+   Recheck Cond: ((nome)::text ~~* '%teles dantas%'::text)
+   Heap Blocks: exact=148
+   Buffers: shared hit=174
+   ->  Bitmap Index Scan on ix_cliente_nome_trgm (actual time=0.451..0.451 rows=148 loops=1)
+         Index Cond: ((nome)::text ~~* '%teles dantas%'::text)
+         Buffers: shared hit=26
+ Planning:
+   Buffers: shared hit=102
+ Planning Time: 0.923 ms
+ Execution Time: 0.973 ms
+(11 rows)
+

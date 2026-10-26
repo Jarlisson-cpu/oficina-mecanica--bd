@@ -1,0 +1,37 @@
+SET search_path TO oficina
+timing on
+-- C06 Top 10 clientes por gasto acumulado e participação no faturamento total.
+--     Relatório sobre TODAS as OS: agrega direto nas tabelas (a view com LATERAL
+--     é ótima para poucas OS, mas mais lenta para varrer tudo — ver view_v1_vs_v2.csv).
+WITH pecas AS (
+    SELECT id_os, sum(quantidade * preco_unitario) AS total_pecas FROM os_peca GROUP BY id_os
+), gasto AS (
+    SELECT c.id_cliente, c.nome, count(*) AS visitas,
+           sum(COALESCE(p.total_pecas, 0) + os.valor_mao_obra - os.desconto) AS total
+      FROM ordem_servico os
+      JOIN veiculo v      ON v.id_veiculo = os.id_veiculo
+      JOIN cliente c      ON c.id_cliente = v.id_cliente
+      LEFT JOIN pecas p   ON p.id_os = os.id_os
+     WHERE os.status = 'CONCLUIDA'
+     GROUP BY c.id_cliente, c.nome
+)
+SELECT RANK() OVER (ORDER BY total DESC) AS pos, nome, visitas, total,
+       round(100 * total / sum(total) OVER (), 3) AS perc_faturamento
+  FROM gasto
+ ORDER BY pos
+ LIMIT 10;
+ pos |          nome           | visitas |  total   | perc_faturamento 
+-----+-------------------------+---------+----------+------------------
+   1 | Vitor Menezes Cardoso   |      41 | 37016.49 |            0.017
+   2 | Carla Souza Silva       |      41 | 32262.59 |            0.015
+   3 | Rafael Costa Freitas    |      30 | 30456.67 |            0.014
+   4 | Sabrina Lima Andrade    |      36 | 30374.78 |            0.014
+   5 | Yasmin Barbosa Brito    |      33 | 29917.20 |            0.014
+   6 | Mariana Menezes Cardoso |      35 | 29815.73 |            0.014
+   7 | Yasmin Costa Gomes      |      30 | 28723.72 |            0.013
+   8 | Isabela Souza Andrade   |      28 | 28168.28 |            0.013
+   9 | Eduarda Oliveira Silva  |      31 | 28128.70 |            0.013
+  10 | Karina Prado Silva      |      31 | 27795.80 |            0.013
+(10 rows)
+
+Time: 1006.147 ms (00:01.006)

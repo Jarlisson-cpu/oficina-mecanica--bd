@@ -1,0 +1,8 @@
+-- R05 [Restrição] ON DELETE RESTRICT: excluir cliente que tem veículos
+-- Esperado: ERRO 23503
+DELETE FROM cliente WHERE id_cliente = 1;
+psql:testes/R05_on_delete_restrict_excluir_cliente_que_tem_ve.sql:3: ERROR:  23503: update or delete on table "cliente" violates foreign key constraint "veiculo_id_cliente_fkey" on table "veiculo"
+DETAIL:  Key (id_cliente)=(1) is still referenced from table "veiculo".
+SCHEMA NAME:  oficina
+TABLE NAME:  veiculo
+CONSTRAINT NAME:  veiculo_id_cliente_fkey

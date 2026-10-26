@@ -1,0 +1,61 @@
+erDiagram
+    CLIENTE ||--o{ VEICULO : "possui"
+    VEICULO ||--o{ ORDEM_SERVICO : "recebe"
+    MECANICO ||--o{ ORDEM_SERVICO : "é responsável"
+    ORDEM_SERVICO ||--o{ OS_PECA : "contém"
+    PECA ||--o{ OS_PECA : "é aplicada em"
+
+    CLIENTE {
+        int id_cliente PK "IDENTITY"
+        varchar nome "NOT NULL"
+        dm_doc cpf_cnpj UK "11 ou 14 dígitos"
+        dm_telefone telefone "NOT NULL"
+        varchar email "CHECK formato"
+        date data_cadastro "DEFAULT hoje"
+    }
+    VEICULO {
+        int id_veiculo PK "IDENTITY"
+        int id_cliente FK "RESTRICT"
+        dm_placa placa UK "AAA9A99"
+        char chassi UK "17 (VIN)"
+        varchar marca
+        varchar modelo
+        smallint ano "1950-2100"
+        int km_atual "CHECK >= 0"
+    }
+    MECANICO {
+        int id_mecanico PK "IDENTITY"
+        varchar nome
+        dm_cpf cpf UK
+        varchar especialidade "CHECK lista"
+        dm_dinheiro valor_hora "> 0"
+        boolean ativo
+    }
+    ORDEM_SERVICO {
+        int id_os PK "IDENTITY"
+        int id_veiculo FK "RESTRICT"
+        int id_mecanico FK "RESTRICT"
+        timestamp data_abertura
+        timestamp data_conclusao "CHECK >= abertura"
+        status_os status "ENUM"
+        int km_entrada "trigger hodômetro"
+        text descricao_problema
+        numeric horas_trabalhadas "0-200"
+        dm_dinheiro valor_mao_obra "trigger"
+        dm_dinheiro desconto "<= mão de obra"
+    }
+    PECA {
+        int id_peca PK "IDENTITY"
+        varchar codigo UK
+        varchar descricao
+        varchar fabricante
+        dm_dinheiro preco_venda "> 0"
+        int qtd_estoque "CHECK >= 0"
+        int estoque_minimo
+    }
+    OS_PECA {
+        int id_os PK,FK "CASCADE"
+        int id_peca PK,FK "RESTRICT"
+        int quantidade "> 0"
+        dm_dinheiro preco_unitario "congelado"
+    }

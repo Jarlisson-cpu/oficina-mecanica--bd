@@ -1,0 +1,19 @@
+SET search_path TO oficina
+timing on
+-- C05 OS pendentes há mais de 7 dias (painel da recepção), agrupadas por status
+SELECT status, count(*) AS qtd,
+       min(data_abertura)::date AS mais_antiga,
+       round(avg(EXTRACT(EPOCH FROM TIMESTAMP '2026-10-26 17:00' - data_abertura) / 86400)::numeric, 1) AS dias_em_aberto
+  FROM ordem_servico
+ WHERE status IN ('ABERTA','EM_EXECUCAO','AGUARDANDO_PECA')
+   AND data_abertura < TIMESTAMP '2026-10-26 17:00' - INTERVAL '7 days'
+ GROUP BY status
+ ORDER BY qtd DESC;
+     status      | qtd | mais_antiga | dias_em_aberto 
+-----------------+-----+-------------+----------------
+ EM_EXECUCAO     | 875 | 2026-10-01  |           16.6
+ AGUARDANDO_PECA | 845 | 2026-10-01  |           16.6
+ ABERTA          | 429 | 2026-10-01  |           16.4
+(3 rows)
+
+Time: 16.865 ms

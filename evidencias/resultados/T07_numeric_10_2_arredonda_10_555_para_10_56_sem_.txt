@@ -1,0 +1,13 @@
+-- T07 [Tipo] NUMERIC(10,2) arredonda 10,555 para 10,56 (sem erro de ponto flutuante)
+-- Esperado: OK
+UPDATE peca SET preco_venda = 10.555 WHERE id_peca = 1;
+UPDATE 1
+SELECT preco_venda,
+       0.1::float8 + 0.2::float8 AS soma_float,
+       0.1::numeric + 0.2::numeric AS soma_numeric,
+       CASE WHEN preco_venda = 10.56 AND 0.1::numeric + 0.2 = 0.3 THEN 'PASSOU' ELSE 'FALHOU' END AS verificacao
+  FROM peca WHERE id_peca = 1;
+ preco_venda |     soma_float      | soma_numeric | verificacao 
+-------------+---------------------+--------------+-------------
+       10.56 | 0.30000000000000004 |          0.3 | PASSOU
+(1 row)

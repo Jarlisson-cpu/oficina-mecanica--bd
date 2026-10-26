@@ -1,0 +1,8 @@
+-- R06 [Restrição] CHECK: km do veículo negativo
+-- Esperado: ERRO 23514
+UPDATE veiculo SET km_atual = -10 WHERE id_veiculo = 1;
+psql:testes/R06_check_km_do_veiculo_negativo.sql:3: ERROR:  23514: new row for relation "veiculo" violates check constraint "veiculo_km_atual_check"
+DETAIL:  Failing row contains (1, 2, CYY0H01, 9BWZZZ00000000001, Fiat, Uno, 2006, -10).
+SCHEMA NAME:  oficina
+TABLE NAME:  veiculo
+CONSTRAINT NAME:  veiculo_km_atual_check

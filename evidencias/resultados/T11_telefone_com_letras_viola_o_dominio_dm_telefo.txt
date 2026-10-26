@@ -1,0 +1,8 @@
+-- T11 [Tipo] Telefone com letras viola o domínio dm_telefone
+-- Esperado: ERRO 23514
+INSERT INTO cliente (nome, cpf_cnpj, telefone)
+VALUES ('Maria Teste', '98765432100', '79-ABC-0000');
+psql:testes/T11_telefone_com_letras_viola_o_dominio_dm_telefo.sql:4: ERROR:  23514: value for domain dm_telefone violates check constraint "dm_telefone_check"
+SCHEMA NAME:  oficina
+DATATYPE NAME:  dm_telefone
+CONSTRAINT NAME:  dm_telefone_check

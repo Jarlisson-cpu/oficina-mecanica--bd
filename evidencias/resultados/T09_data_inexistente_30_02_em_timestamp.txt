@@ -1,0 +1,6 @@
+-- T09 [Tipo] Data inexistente (30/02) em TIMESTAMP
+-- Esperado: ERRO 22008
+UPDATE ordem_servico SET data_abertura = '2026-02-30 10:00' WHERE id_os = 1;
+psql:testes/T09_data_inexistente_30_02_em_timestamp.sql:3: ERROR:  22008: date/time field value out of range: "2026-02-30 10:00"
+LINE 1: UPDATE ordem_servico SET data_abertura = '2026-02-30 10:00' ...
+                                                 ^

@@ -1,0 +1,29 @@
+SET search_path TO oficina
+timing on
+-- C02 Faturamento mensal de 2026 (OS concluídas): peças, mão de obra e ticket médio
+SELECT to_char(date_trunc('month', data_conclusao), 'YYYY-MM') AS mes,
+       count(*)                          AS os_concluidas,
+       sum(total_pecas)                  AS pecas,
+       sum(valor_mao_obra - desconto)    AS mao_de_obra,
+       sum(valor_total)                  AS faturamento,
+       round(avg(valor_total), 2)        AS ticket_medio
+  FROM vw_os_total
+ WHERE status = 'CONCLUIDA'
+   AND data_conclusao >= '2026-01-01' AND data_conclusao < '2026-11-01'
+ GROUP BY 1
+ ORDER BY 1;
+   mes   | os_concluidas |   pecas    | mao_de_obra | faturamento | ticket_medio 
+---------+---------------+------------+-------------+-------------+--------------
+ 2026-01 |          4273 | 1682686.45 |  1581814.50 |  3264500.95 |       763.98
+ 2026-02 |          3813 | 1474812.01 |  1438048.64 |  2912860.65 |       763.93
+ 2026-03 |          4153 | 1582267.39 |  1553536.34 |  3135803.73 |       755.07
+ 2026-04 |          4025 | 1566501.53 |  1533425.58 |  3099927.11 |       770.17
+ 2026-05 |          4263 | 1649939.06 |  1609095.67 |  3259034.73 |       764.49
+ 2026-06 |          3952 | 1521000.55 |  1474412.37 |  2995412.92 |       757.95
+ 2026-07 |          4155 | 1576643.88 |  1607307.64 |  3183951.52 |       766.29
+ 2026-08 |          4317 | 1692625.55 |  1629002.98 |  3321628.53 |       769.43
+ 2026-09 |          4079 | 1537335.02 |  1531513.79 |  3068848.81 |       752.35
+ 2026-10 |          1285 |  477885.31 |   483684.33 |   961569.64 |       748.30
+(10 rows)
+
+Time: 331.412 ms

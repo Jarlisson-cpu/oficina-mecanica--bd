@@ -1,0 +1,5 @@
+-- G04 [Regra] OS CONCLUIDA não aceita novas peças
+-- Esperado: ERRO P0001
+INSERT INTO os_peca (id_os, id_peca, quantidade)
+VALUES ((SELECT min(id_os) FROM ordem_servico WHERE status = 'CONCLUIDA'), 499, 1);
+psql:testes/G04_os_concluida_nao_aceita_novas_pecas.sql:4: ERROR:  P0001: OS 1 está CONCLUIDA e não aceita alteração de peças

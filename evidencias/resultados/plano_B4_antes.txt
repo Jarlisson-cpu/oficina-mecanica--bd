@@ -1,0 +1,26 @@
+-- B4 Faturamento de mão de obra em set/2026 (antes dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT sum(valor_mao_obra - desconto) FROM ordem_servico
+ WHERE data_conclusao >= '2026-09-01' AND data_conclusao < '2026-10-01';
+
+SET
+                                                                                   QUERY PLAN                                                                                   
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=21.294..23.384 rows=1 loops=1)
+   Buffers: shared hit=8204
+   ->  Gather (actual time=18.327..23.358 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=8204
+         ->  Partial Aggregate (actual time=15.361..15.362 rows=1 loops=3)
+               Buffers: shared hit=8204
+               ->  Parallel Seq Scan on ordem_servico (actual time=1.065..14.934 rows=1360 loops=3)
+                     Filter: ((data_conclusao >= '2026-09-01 00:00:00'::timestamp without time zone) AND (data_conclusao < '2026-10-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 98640
+                     Buffers: shared hit=8204
+ Planning:
+   Buffers: shared hit=86
+ Planning Time: 0.616 ms
+ Execution Time: 23.524 ms
+(16 rows)
+

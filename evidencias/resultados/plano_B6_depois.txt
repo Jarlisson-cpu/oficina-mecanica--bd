@@ -1,0 +1,16 @@
+-- B6 Veículos de um cliente (depois dos índices)
+EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)
+SELECT placa, marca, modelo FROM veiculo WHERE id_cliente = 4321;
+
+SET
+                                        QUERY PLAN                                        
+------------------------------------------------------------------------------------------
+ Index Scan using ix_veiculo_cliente on veiculo (actual time=0.028..0.047 rows=2 loops=1)
+   Index Cond: (id_cliente = 4321)
+   Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=115
+ Planning Time: 0.629 ms
+ Execution Time: 0.164 ms
+(7 rows)
+
