@@ -57,6 +57,15 @@ artigo/                   artigo no modelo SBC (.tex, .pdf, .docx)
 
 ## Como executar
 
+### No Windows
+
+1. Instale o **PostgreSQL 16** (https://www.postgresql.org/download/windows/) e anote a senha do usuário `postgres`.
+2. Instale o **Python 3** (https://www.python.org/downloads/), marcando *Add python.exe to PATH*, e rode `pip install pillow`.
+3. Baixe o repositório (botão verde **Code → Download ZIP**) e extraia.
+4. Dê dois cliques em `scripts\rodar_tudo_windows.bat` e digite a senha do `postgres`.
+
+### No Linux/Mac
+
 ```bash
 createdb oficina
 ./scripts/rodar_tudo.sh          # ~1 min: cria, carrega, testa, mede e captura
